@@ -2,13 +2,15 @@
 <html lang="en">
   <%- include('../partials/head') %>
   <body>
-    <%- include('../partials/header') %>
-    <%- include('../partials/navigation') %>
+      <div id="wrapper">
+      <%- include('../partials/header') %>
+      <%- include('../partials/navigation') %>
 
-    <main>
-      <%- body %> <!-- This is where page content gets injected -->
-    </main>
+      <main>
+        <%- body %> <!-- This is where page content gets injected -->
+      </main>
 
-    <%- include('../partials/footer') %>
+      <%- include('../partials/footer') %>
+    </div>
   </body>
 </html>

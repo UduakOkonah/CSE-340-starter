@@ -1,6 +1,241 @@
+/* styles.css */
+@import url("https://fonts.googleapis.com/css2?family=Inter&family=Literata:opsz@7..72&display=swap");
+
 /******* Change Box Model ***************/
 *,
 *:before,
 *:after {
   box-sizing: border-box;
+}
+
+:root {
+  --primary-background: #fff;
+  --main-accent: #01b0d3;
+  --body-font: Inter;
+  --primary-text: #242333; 
+  --heading-font: Literata; 
+}
+
+body {
+  overflow-x: hidden;
+  font-family: var(--body-font), sans-serif;
+  margin: 1rem;
+}
+
+/*header.ejs*/
+#top-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.siteName {
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+
+#tools {
+  font-size: 3vw;
+  font-variant: small-caps;
+  display: flex;
+  width: 20%;
+  justify-content: space-evenly;
+}
+
+header a {
+  text-decoration: none;
+  color: var(--primary-text);
+  display: inline-block;
+  padding: 2vh 0;
+}
+
+/*navigation.ejs*/
+nav {
+  color: var(--primary-background);
+  margin-top: 0.75rem;
+}
+
+nav ul {
+  background-color: var(--primary-text);
+  display: flex;
+  justify-content: space-around;
+  border-radius: 8px;
+  align-items: center;
+  padding: 0 1vw;
+  margin: 0;
+}
+
+nav li {
+  list-style: none;
+  padding: 1em 0;
+}
+
+nav a {
+  color: var(--primary-background);
+  text-decoration: none;
+}
+
+/*footer.ejs*/
+footer {
+  margin-top: 2rem;
+}
+
+footer p {
+  margin: 0;
+  padding: 0;
+  font-size: 0.9rem;
+}
+
+/*index.ejs*/
+img {
+  max-width: 100%;
+}
+
+h1,
+h2 {
+  font-size: 1.2em;
+  font-family: var(--heading-font), serif;
+}
+
+#hero {
+  background-image: url("/images/vehicles/delorean.jpg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+}
+
+#hero h2 {
+  margin-left: 0;
+}
+
+#hero a:hover {
+  opacity: 0.5;
+}
+
+#hero li {
+  list-style: none;
+  color: var(--main-accent);
+}
+
+#hero li h2 {
+  margin-top: 0;
+  margin-bottom: 0;
+  color: var(--main-accent);
+}
+
+#hero ul {
+  padding-left: 0;
+  margin-top: 0;
+  max-width: 200px;
+  margin-left: 0.5em;
+  margin-bottom: 2rem;
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+#hero li {
+  font-size: 0.85em;
+}
+
+#actionbtn {
+  display: inline-block;
+  max-width: 25vw;
+  max-height: 10vh;
+  padding: 0.5rem;
+  background-color: var(--main-accent);
+  color: var(--primary-text);
+  font-weight: 800;
+  border-radius: 0.25rem;
+}
+
+#actionbtn:hover {
+  opacity: 0.5;
+}
+
+section ul {
+  padding: 0 0 0 1rem;
+}
+
+#review li {
+  font-size: 0.9em;
+  margin-bottom: 1em;
+}
+
+.flex {
+  display: flex;
+  margin-bottom: 2em;
+  justify-content: center;
+  width: 90%;
+  padding-left: 0.25em;
+}
+
+.flex a {
+  width: 100%;
+}
+
+.add-col {
+  background-color: var(--main-accent);
+  height: 5.5em;
+  width: 95%;
+  border: var(--primary-text) solid 1px;
+}
+
+a figure {
+  margin: 0;
+}
+
+figure img {
+  display: block;
+  margin: auto;
+  padding-top: 0.5em;
+}
+
+figure figcaption {
+  text-align: center;
+}
+
+section {
+  margin-bottom: 2em;
+  margin-top: 1em;
+}
+
+/* ========== Large Screen Styles (Desktop) ========== */
+@media screen and (min-width: 768px) {
+  body {
+  padding: 0;
+  background: url("../images/site/checkerboard.jpg") repeat;
+}
+
+#wrapper {
+  background-color: var(--primary-background);
+  max-width: 960px;
+  margin: 2rem auto;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  overflow: hidden;
+}
+
+ .main {
+    margin: 1rem auto;
+    max-width: 960px;
+    padding: 2rem;
+  }
+
+
+  header, nav, footer {
+    text-align: left;
+  }
+
+  .flex-content {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+  }
+
+  
+  .flex-content section {
+    flex: 1; /* Each section takes equal width */
+    margin: 0 1rem;
+  }
 }
