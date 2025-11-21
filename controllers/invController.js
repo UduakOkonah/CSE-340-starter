@@ -27,15 +27,16 @@ invCont.buildByInventoryId = async function (req, res, next) {
     const inv_id = req.params.inv_id;
     const data = await invModel.getInventoryById(inv_id);
 
-    if (!data) {
+    if (!data || data.length === 0) {
       return res.status(404).render("errors/404", { 
         title: "Vehicle Not Found" 
       });
     }
 
-    const detail = await utilities.buildVehicleDetail(data);
+    const vehicle = data[0]; // <-- get the single vehicle object
+    const detail = await utilities.buildVehicleDetail(vehicle);
     const nav = await utilities.getNav();
-    const title = `${data.inv_make} ${data.inv_model}`;
+    const title = `${vehicle.inv_make} ${vehicle.inv_model}`; // <-- fix here
 
     res.render("inventory/detail", {
       title,
@@ -47,6 +48,5 @@ invCont.buildByInventoryId = async function (req, res, next) {
     next(error);
   }
 };
-
 
 module.exports = invCont
