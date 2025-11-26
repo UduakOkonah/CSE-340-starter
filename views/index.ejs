@@ -1,6 +1,15 @@
 <div class="main">
     <h1>Welcome to CSE Motors!</h1>
 
+<% if (messages && messages.length > 0) { %>
+  <div class="flash-messages">
+    <% messages.forEach(msg => { %>
+      <ul class="notice"><%= msg %></ul>
+    <% }) %>
+  </div>
+<% } %>
+
+
     <section id="hero">
         <ul>
             <li>

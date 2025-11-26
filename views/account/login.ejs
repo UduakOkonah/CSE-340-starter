@@ -1,0 +1,69 @@
+<main class="form-container">
+  <h1><%= title %></h1>
+
+  <!-- Flash messages -->
+  <% if (messages && messages.length > 0) { %>
+    <div class="flash-messages">
+      <% notice.forEach(msg => { %>
+        <ul class="flash"><%= msg %></ul>
+      <% }) %>
+    </div>
+  <% } %>
+
+<!-- Server-side validation errors -->
+<% if (errors && errors.length > 0) { %>
+  <ul class="notice">
+    <% errors.forEach(error => { %>
+      <li><%= error.msg %></li>
+    <% }) %>
+  </ul>
+<% } %>
+
+
+  <!-- Login Form -->
+  <form id="loginForm" action="/account/login" method="POST" class="login-form">
+
+    <label for="email">Email</label>
+    <input 
+      type="email" 
+      id="email" 
+      name="account_email" 
+      required
+      value="<%= typeof account_email !== 'undefined' ? account_email : '' %>"
+    >
+
+    <label for="password">Password</label>
+    <div class="password-wrapper">
+      <input 
+        type="password" 
+        name="account_password" 
+        id="accountPassword" 
+        required
+        pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$"
+      >
+      <button type="button" id="togglePassword" class="toggle-btn">Show</button>
+    </div>
+
+    <div class="password-rules">
+      Passwords must be at least 12 characters and contain at least 1 number,  
+      1 capital letter, and 1 special character.
+    </div>
+
+    <button type="submit">Login</button>
+  </form>
+
+  <p class="small-link">
+    New here? <a href="/account/register">Create an account</a>
+  </p>
+</main>
+
+<script>
+  const toggle = document.getElementById("togglePassword");
+  const password = document.getElementById("accountPassword");
+
+  toggle.addEventListener("click", () => {
+    const type = password.getAttribute("type") === "password" ? "text" : "password";
+    password.setAttribute("type", type);
+    toggle.textContent = type === "password" ? "Show" : "Hide";
+  });
+</script>

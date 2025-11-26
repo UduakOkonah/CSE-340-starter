@@ -1,0 +1,41 @@
+<main class="form-wrapper">
+
+  <% let messages = locals.messages || []; %>
+
+  <h1><%= title %></h1>
+
+  <!-- Flash messages -->
+  <% if (messages.length > 0) { %>
+    <div class="flash-messages">
+      <% messages.forEach(msg => { %>
+        <ul><%= msg %></ul>
+      <% }) %>
+    </div>
+  <% } %>
+
+  <!-- Validation errors -->
+  <% if (errors && errors.length > 0) { %>
+    <ul class="notice">
+      <% errors.forEach(error => { %>
+        <li><%= error.msg %></li>
+      <% }) %>A
+    </ul>
+  <% } %>
+
+  <form action="/inv/add-classification" method="POST" id="addClassificationForm" class="styled-form">
+
+    <label for="classification_name">New Classification Name</label>
+    <small class="hint">Only alphabetical characters allowed</small>
+
+    <input
+      type="text"
+      name="classification_name"
+      id="classification_name"
+      value="<%= typeof classification_name !== 'undefined' ? classification_name : '' %>"
+      required
+    >
+
+    <button type="submit" class="submit-btn">Add Classification</button>
+  </form>
+
+</main>

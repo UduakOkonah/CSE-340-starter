@@ -1,0 +1,30 @@
+<main class="main form-container">
+  <h1><%= title %></h1>
+
+  <!-- Flash messages -->
+  <% if (messages && Array.isArray(messages) && messages.length > 0) { %>
+    <div class="flash-messages">
+      <% messages.forEach(msg => { %>
+        <ul class="notice"><%= msg %></ul>
+      <% }) %>
+    </div>
+  <% } %>
+
+  <section class="management-links">
+    <p>Use the links below to start an add process (these follow the MVC routes):</p>
+
+    <ul>
+      <li>
+        <a href="/inv/add-classification" title="Add new classification">
+          Add New Classification
+        </a>
+      </li>
+
+      <li>
+        <a href="/inv/add-inventory" title="Add new inventory item">
+          Add New Inventory Item
+        </a>
+      </li>
+    </ul>
+  </section>
+</main>

@@ -16,6 +16,8 @@ const miscRouter = require("./routes/miscRouter");
 const utilities = require("./utilities/")
 const session = require("express-session")
 const pool = require('./database/')
+const accountRoute = require("./routes/accountRoute")
+const bodyParser = require("body-parser")
 
 /* ***********************
  * Middleware
@@ -30,6 +32,19 @@ const pool = require('./database/')
   saveUninitialized: true,
   name: 'sessionId',
 }))
+
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
+
+
+// Express Messages Middleware
+app.use(require("connect-flash")())
+
+app.use((req, res, next) => {
+  res.locals.notice = req.flash("notice")
+  next()
+})
+
 
 /* ***********************
 * View Engine and Templates
@@ -50,6 +65,10 @@ app.get("/", utilities.handleErrors(baseController.buildHome));
 app.use("/inv", inventoryRoute);
 
 app.use("/", miscRouter);
+
+// Account routes
+app.use("/account", accountRoute)
+
 
 
 // File Not Found Route - must be last route in list
