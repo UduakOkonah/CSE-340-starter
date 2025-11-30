@@ -1,0 +1,17 @@
+<main class="account-container">
+  <h1 class="page-title">Account Management</h1>
+
+  <p class="welcome-text">Welcome to your dashboard, <%= accountData.account_firstname %>!</p>
+
+  <div class="account-actions">
+    <a class="btn" href="/account/edit">Edit Account Information</a>
+  </div>
+
+  <% if (messages && messages.length > 0) { %>
+    <ul class="messages">
+      <% messages.forEach(msg => { %>
+        <li class="message-item"><%= msg %></li>
+      <% }) %>
+    </ul>
+  <% } %>
+</main>

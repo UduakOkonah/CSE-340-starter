@@ -1,0 +1,24 @@
+<main class="account-container">
+  <h1 class="page-title">Edit Account Information</h1>
+
+  <% if (messages && messages.length > 0) { %>
+    <ul class="messages">
+      <% messages.forEach(msg => { %>
+        <li class="message-item"><%= msg %></li>
+      <% }) %>
+    </ul>
+  <% } %>
+
+  <form class="account-form" action="/account/edit" method="post">
+    <label for="account_firstname">First Name</label>
+    <input type="text" id="account_firstname" name="account_firstname" value="<%= account.account_firstname %>" required>
+
+    <label for="account_lastname">Last Name</label>
+    <input type="text" id="account_lastname" name="account_lastname" value="<%= account.account_lastname %>" required>
+
+    <label for="account_email">Email</label>
+    <input type="email" id="account_email" name="account_email" value="<%= account.account_email %>" required>
+    <br>
+    <button type="submit" class="btn">Save Changes</button>
+  </form>
+</main>

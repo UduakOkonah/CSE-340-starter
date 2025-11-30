@@ -14,21 +14,23 @@
   <% } %>
 
   <!-- Validation errors -->
-  <% if (errors && errors.length > 0) { %>
+    <% if (errors && errors.length > 0) { %>
     <ul class="notice">
-      <% errors.forEach(error => { %>
+        <% errors.forEach(error => { %>
         <li><%= error.msg %></li>
-      <% }) %>
+        <% }) %>
     </ul>
-  <% } %>
+    <% } %>
 
-  <form action="/inv/add-inventory" method="POST" id="addInventoryForm" class="styled-form">
+<form action="/inv/update" method="post" class="styled-form" id="updateForm">
+
 
     <!-- Classification Select -->
      <small class="hint">ALL FIELD ARE REQUIRED</small> <br>
     <label for="classificationList">Classification</label>
     <small class="hint">Select a classification for the vehicle</small>
-    <%- classificationList %>
+    <%- classificationSelect %>
+
 
     <!-- Vehicle Make -->
     <label for="inv_make">Make</label>
@@ -124,7 +126,10 @@
       required
     >
 
-    <button type="submit" class="submit-btn">Add Vehicl</button>
+    <button type="submit" class="submit-btn" disabled>Update Vehicle </button>
+    <input type="hidden" name="inv_id"
+    <% if(locals.inv_id) { %> value="<%= locals.inv_id %>"
+    <% } %>>
   </form>
-
 </main>
+<script src="/js/inv-update.js"></script>

@@ -86,7 +86,7 @@ const checkClassificationData = async (req, res, next) => {
 }
 
 /* ***************
- * Check inventory data
+ * Check inventory data for adding vehicle
  **************** */
 const checkInventoryData = async (req, res, next) => {
   const errors = validationResult(req);
@@ -104,9 +104,30 @@ const checkInventoryData = async (req, res, next) => {
   next();
 };
 
+/* ***************
+ * Check inventory data for updating
+ * Redirects back to edit view if there are errors
+ **************** */
+const checkUpdateData = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    let nav = await require("./index").getNav();
+    let classificationList = await require("./index").buildClassificationList(req.body.classification_id);
+    return res.render("inventory/edit-inventory", { // updated view
+      title: `Edit ${req.body.inv_make} ${req.body.inv_model}`, // updated title
+      nav,
+      errors: errors.array(),
+      classificationSelect: classificationList,
+      ...req.body, // sticky fields including inv_id
+    });
+  }
+  next();
+};
+
 module.exports = {
   classificationRules,
   checkClassificationData,
   inventoryRules,
   checkInventoryData,
+  checkUpdateData,
 };

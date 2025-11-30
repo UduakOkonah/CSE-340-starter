@@ -55,19 +55,19 @@ invCont.buildByInventoryId = async function (req, res, next) {
 invCont.buildManagement = async function (req, res, next) {
   try {
     const nav = await utilities.getNav()
-    // Normalize flash messages
-    let messages = req.flash("notice")
-    if (!Array.isArray(messages)) messages = []
+    const classificationSelect = await utilities.buildClassificationList()
 
     res.render("inventory/manage", {
       title: "Inventory Management",
       nav,
-      messages,
+      classificationSelect,
+      errors: null
     })
   } catch (error) {
     next(error)
   }
 }
+
 
 /* ****************************************
  * Deliver add-classification view (Task 2)
@@ -205,5 +205,121 @@ invCont.addInventory = async function (req, res, next) {
   }
 };
 
+/* ***************************
+ *  Return Inventory by Classification As JSON
+ * ************************** */
+invCont.getInventoryJSON = async (req, res, next) => {
+  const classification_id = parseInt(req.params.classification_id)
+  const invData = await invModel.getInventoryByClassificationId(classification_id)
+  if (invData[0].inv_id) {
+    return res.json(invData)
+  } else {
+    next(new Error("No data returned"))
+  }
+}
+
+/* ***************************
+ *  Build edit inventory view
+ * ************************** */
+invCont.editInventoryView = async function (req, res, next) {
+  try {
+    const inv_id = parseInt(req.params.inv_id);
+    let nav = await utilities.getNav();
+
+    // Get inventory item data
+    const itemData = await invModel.getInventoryById(inv_id);
+
+    if (!itemData || itemData.length === 0) {
+      return res.status(404).render("errors/404", { title: "Vehicle Not Found" });
+    }
+
+    // Build classification select list, mark the current classification as selected
+    const classificationSelect = await utilities.buildClassificationList(itemData[0].classification_id);
+
+    const itemName = `${itemData[0].inv_make} ${itemData[0].inv_model}`;
+
+    // Render the edit-inventory view
+    res.render("./inventory/edit-inventory", {
+      title: "Edit " + itemName,
+      nav,
+      classificationSelect,
+      errors: null,
+      inv_id: itemData[0].inv_id,
+      inv_make: itemData[0].inv_make,
+      inv_model: itemData[0].inv_model,
+      inv_year: itemData[0].inv_year,
+      inv_description: itemData[0].inv_description,
+      inv_image: itemData[0].inv_image,
+      inv_thumbnail: itemData[0].inv_thumbnail,
+      inv_price: itemData[0].inv_price,
+      inv_miles: itemData[0].inv_miles,
+      inv_color: itemData[0].inv_color,
+      classification_id: itemData[0].classification_id
+    });
+
+  } catch (error) {
+    next(error);
+  }
+}
+
+/* ***************************
+ *  Update Inventory Data
+ * ************************** */
+invCont.updateInventory = async function (req, res, next) {
+  let nav = await utilities.getNav()
+  const {
+    inv_id,
+    inv_make,
+    inv_model,
+    inv_description,
+    inv_image,
+    inv_thumbnail,
+    inv_price,
+    inv_year,
+    inv_miles,
+    inv_color,
+    classification_id,
+  } = req.body
+  const updateResult = await invModel.updateInventory(
+    inv_id,  
+    inv_make,
+    inv_model,
+    inv_description,
+    inv_image,
+    inv_thumbnail,
+    inv_price,
+    inv_year,
+    inv_miles,
+    inv_color,
+    classification_id
+  )
+
+  if (updateResult) {
+    const itemName = updateResult.inv_make + " " + updateResult.inv_model
+    req.flash("notice", `The ${itemName} was successfully updated.`)
+    res.redirect("/inv/")
+  } else {
+    const classificationSelect = await utilities.buildClassificationList(classification_id)
+    const itemName = `${inv_make} ${inv_model}`
+    req.flash("notice", "Sorry, the insert failed.")
+    res.status(501).render("inventory/edit-inventory", {
+    title: "Edit " + itemName,
+    nav,
+    classificationSelect: classificationSelect,
+    errors: null,
+    inv_id,
+    inv_make,
+    inv_model,
+    inv_year,
+    inv_description,
+    inv_image,
+    inv_thumbnail,
+    inv_price,
+    inv_miles,
+    inv_color,
+    classification_id
+    })
+  }
+}
 
 module.exports = invCont

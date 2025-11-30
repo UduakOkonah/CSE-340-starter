@@ -1,12 +1,15 @@
+
 <main class="main form-container">
   <h1><%= title %></h1>
 
   <!-- Flash messages -->
-  <% if (messages && Array.isArray(messages) && messages.length > 0) { %>
+  <% if (messages && messages.length > 0) { %>
     <div class="flash-messages">
-      <% messages.forEach(msg => { %>
-        <ul class="notice"><%= msg %></ul>
-      <% }) %>
+      <ul class="notice">
+        <% messages.forEach(msg => { %>
+          <li><%= msg %></li>
+        <% }) %>
+      </ul>
     </div>
   <% } %>
 
@@ -27,4 +30,19 @@
       </li>
     </ul>
   </section>
+
+  <!-- BELOW THIS IS WHAT YOU MUST ADD -->
+
+  <h2>Manage Inventory</h2>
+
+  <p>Select a classification from the list to see the items belonging to that classification.</p>
+
+  <%- classificationSelect %>
+
+  <table id="inventoryDisplay"></table>
+
+  <noscript>JavaScript must be enabled to use this page.</noscript>
+
 </main>
+<script src="/js/inventory.js"></script>
+

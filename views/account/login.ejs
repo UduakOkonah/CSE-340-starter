@@ -4,7 +4,7 @@
   <!-- Flash messages -->
   <% if (messages && messages.length > 0) { %>
     <div class="flash-messages">
-      <% notice.forEach(msg => { %>
+      <% messages.forEach(msg => { %>
         <ul class="flash"><%= msg %></ul>
       <% }) %>
     </div>

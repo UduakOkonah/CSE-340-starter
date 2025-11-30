@@ -15,9 +15,11 @@ const inventoryRoute = require("./routes/inventoryRoute")
 const miscRouter = require("./routes/miscRouter");
 const utilities = require("./utilities/")
 const session = require("express-session")
+const flash = require("connect-flash")
 const pool = require('./database/')
 const accountRoute = require("./routes/accountRoute")
 const bodyParser = require("body-parser")
+const cookieParser = require("cookie-parser")
 
 /* ***********************
  * Middleware
@@ -31,19 +33,23 @@ const bodyParser = require("body-parser")
   resave: true,
   saveUninitialized: true,
   name: 'sessionId',
+  cookie: { maxAge: 1000 * 60 * 60 } // 1 hour
 }))
+
+app.use(cookieParser())
+
+// Flash middleware
+app.use(flash())
+
+app.use((req, res, next) => {
+  res.locals.messages = req.flash("notice")
+  next()
+})
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
-
-// Express Messages Middleware
-app.use(require("connect-flash")())
-
-app.use((req, res, next) => {
-  res.locals.notice = req.flash("notice")
-  next()
-})
+app.use(utilities.checkJWTToken)
 
 
 /* ***********************
