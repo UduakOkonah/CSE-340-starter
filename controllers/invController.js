@@ -322,4 +322,60 @@ invCont.updateInventory = async function (req, res, next) {
   }
 }
 
+/* ***************************
+ *  Deliver Delete Confirmation View
+ * ************************** */
+invCont.deleteInventoryView = async (req, res, next) => {
+  try {
+    const nav = await utilities.getNav();
+    const inv_id = parseInt(req.params.inv_id);
+const result = await invModel.getInventoryById(inv_id);
+
+if (!result || result.length === 0) {
+  req.flash("notice", "Inventory item not found");
+  return res.redirect("/inv/");
+}
+
+const itemData = result[0]; // grab the first (and only) row
+
+res.render("inventory/delete-confirm", {
+  title: `Delete ${itemData.inv_make} ${itemData.inv_model}`,
+  nav,
+  inv_id: itemData.inv_id,
+  inv_make: itemData.inv_make,
+  inv_model: itemData.inv_model,
+  inv_year: itemData.inv_year,
+  inv_price: itemData.inv_price,
+  errors: null
+});
+
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+/* ***************************
+ *  Delete Inventory Item
+ * ************************** */
+// In invController.js
+invCont.deleteInventory = async (req, res, next) => {
+  try {
+    const inv_id = parseInt(req.body.inv_id);
+    const deleteResult = await invModel.deleteInventoryItem(inv_id);
+
+    if (deleteResult.rowCount > 0) {
+      req.flash("notice", "Inventory item successfully deleted.");
+      res.redirect("/inv/");
+    } else {
+      req.flash("notice", "Delete failed.");
+      res.redirect(`/inv/delete/${inv_id}`);
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+
 module.exports = invCont

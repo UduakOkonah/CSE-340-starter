@@ -1,0 +1,46 @@
+<main class="form-wrapper">
+
+  <% let messages = locals.messages || []; %>
+
+  <h1>Delete <%= inv_make %> <%= inv_model %></h1>
+
+  <!-- Flash messages -->
+  <% if (messages.length > 0) { %>
+    <div class="flash-messages">
+      <% messages.forEach(msg => { %>
+        <ul class="flash"><%= msg %></ul>
+      <% }) %>
+    </div>
+  <% } %>
+
+  <!-- Validation errors -->
+  <% if (errors && errors.length > 0) { %>
+    <ul class="notice">
+      <% errors.forEach(error => { %>
+        <li><%= error.msg %></li>
+      <% }) %>
+    </ul>
+  <% } %>
+
+  <p class="warning">Confirm Deletion - This action is permanent!</p>
+
+  <form action="/inv/delete/" method="post" class="styled-form" id="deleteForm">
+
+    <label for="inv_make">Make</label>
+    <input type="text" name="inv_make" id="inv_make" value="<%= inv_make %>" readonly>
+
+    <label for="inv_model">Model</label>
+    <input type="text" name="inv_model" id="inv_model" value="<%= inv_model %>" readonly>
+
+    <label for="inv_year">Year</label>
+    <input type="number" name="inv_year" id="inv_year" value="<%= inv_year %>" readonly>
+
+    <label for="inv_price">Price</label>
+    <input type="number" name="inv_price" id="inv_price" value="<%= inv_price %>" readonly>
+
+    <!-- Hidden Inventory ID -->
+    <input type="hidden" name="inv_id" value="<%= inv_id %>">
+
+    <button type="submit" class="submit-btn delete-btn">Delete</button>
+  </form>
+</main>
