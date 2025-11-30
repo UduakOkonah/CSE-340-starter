@@ -20,6 +20,7 @@ const pool = require('./database/')
 const accountRoute = require("./routes/accountRoute")
 const bodyParser = require("body-parser")
 const cookieParser = require("cookie-parser")
+const jwt = require('jsonwebtoken');
 
 /* ***********************
  * Middleware
@@ -51,6 +52,22 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use(utilities.checkJWTToken)
 
+app.use((req, res, next) => {
+  const token = req.cookies.jwt; // assuming you used cookie-parser
+
+  if (token) {
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      res.locals.account = decoded; // account info from token
+    } catch (err) {
+      res.locals.account = null;
+    }
+  } else {
+    res.locals.account = null;
+  }
+  next();
+});
+
 
 /* ***********************
 * View Engine and Templates
@@ -63,6 +80,8 @@ app.set("layout", "./layouts/layout"); // not at views root
 * Routes
 *************************/
 app.use(static);
+
+app.use(utilities.checkJWTToken)
 
 // Index route
 app.get("/", utilities.handleErrors(baseController.buildHome));

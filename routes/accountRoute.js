@@ -41,8 +41,20 @@ router.get(
 router.post(
   "/edit",
   utilities.checkLogin,
+  regValidate.updateAccountRules(),
+  regValidate.checkUpdateData,
   utilities.handleErrors(accountController.updateAccount)
 )
 
+// Process password change
+router.post(
+  "/change-password",
+  utilities.checkLogin,
+  regValidate.passwordRules(),
+  regValidate.checkPasswordData,
+  utilities.handleErrors(accountController.updatePassword)
+);
+
+router.get("/logout", accountController.logout);
 
 module.exports = router

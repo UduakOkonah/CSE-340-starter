@@ -110,4 +110,84 @@ validate.checkLoginData = async (req, res, next) => {
 }
 
 
+/* ******************************
+ * Account Update Validation Rules
+ ***************************** */
+validate.updateAccountRules = () => {
+  return [
+    body("account_firstname")
+      .trim()
+      .notEmpty()
+      .withMessage("First name is required."),
+
+    body("account_lastname")
+      .trim()
+      .notEmpty()
+      .withMessage("Last name is required."),
+
+    body("account_email")
+      .trim()
+      .isEmail()
+      .withMessage("Valid email is required.")
+      .normalizeEmail()
+      .custom(async (account_email, { req }) => {
+        const accountId = req.body.account_id;
+        const emailExists = await accountModel.checkExistingEmail(account_email);
+        if (emailExists && emailExists.account_id != accountId) {
+          throw new Error("Email already in use by another account.");
+        }
+      }),
+  ];
+};
+
+/* ******************************
+ * Check Account Update Data
+ ***************************** */
+validate.checkUpdateData = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    let nav = await utilities.getNav();
+    return res.render("account/account-edit", {
+      title: "Edit Account Information",
+      nav,
+      errors: errors.array(),
+      messages: [],
+      account: req.body,
+    });
+  }
+  next();
+};
+
+/* ******************************
+ * Password Validation Rules
+ ***************************** */
+validate.passwordRules = () => {
+  return [
+    body("new_password")
+      .trim()
+      .matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$/)
+      .withMessage(
+        "Password must be at least 12 characters and include 1 number, 1 capital letter, and 1 special character."
+      ),
+  ];
+};
+
+/* ******************************
+ * Check Password Data
+ ***************************** */
+validate.checkPasswordData = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    let nav = await utilities.getNav();
+    return res.render("account/account-edit", {
+      title: "Edit Account Information",
+      nav,
+      errors: errors.array(),
+      messages: [],
+      account: req.body,
+    });
+  }
+  next();
+};
+
 module.exports = validate

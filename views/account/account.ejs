@@ -7,6 +7,15 @@
     <a class="btn" href="/account/edit">Edit Account Information</a>
   </div>
 
+   <!-- Inventory Management section (Employee/Admin only) -->
+  <% if (accountData.account_type === "Employee" || accountData.account_type === "Admin") { %>
+    <div class="account-actions">
+    <h3>Inventory Management</h3>
+    <p><a class="btn" href="/inv/">Access Inventory Management</a></p>
+    </div>
+  <% } %>
+
+  <!-- Flash messages -->
   <% if (messages && messages.length > 0) { %>
     <ul class="messages">
       <% messages.forEach(msg => { %>

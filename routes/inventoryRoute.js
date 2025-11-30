@@ -5,6 +5,7 @@ const invController = require("../controllers/invController")
 const utilities = require("../utilities");
 const invValidate = require("../utilities/inventory-validation")
 const { inventoryRules, checkUpdateData } = require("../utilities/inventory-validation");
+const auth = require("../utilities/account-authorization")
 
 
 // Route to build inventory by classification view
@@ -16,21 +17,23 @@ router.get("/detail/:inv_id", utilities.handleErrors(invController.buildByInvent
 // Inventory management page (access via /inv/)
 router.get(
   "/",
+  auth.checkEmployeeOrAdmin,
   utilities.handleErrors(invController.buildManagement)
 )
 
 // Deliver the add-classification view
-router.get('/add-classification', invController.buildAddClassification);
+router.get('/add-classification', auth.checkEmployeeOrAdmin, invController.buildAddClassification);
 
 // Process form submission
 router.post(
   "/add-classification",
+  auth.checkEmployeeOrAdmin,
   invValidate.classificationRules(),
   invValidate.checkClassificationData,
   invController.addClassification
 )
 
-router.get("/add-inventory", utilities.handleErrors(async (req, res) => {
+router.get("/add-inventory", auth.checkEmployeeOrAdmin, utilities.handleErrors(async (req, res) => {
   let nav = await utilities.getNav();
   let classificationList = await utilities.buildClassificationList();
   res.render("inventory/add-inventory", {
@@ -44,6 +47,7 @@ router.get("/add-inventory", utilities.handleErrors(async (req, res) => {
 
 router.post(
   "/add-inventory",
+  auth.checkEmployeeOrAdmin,
   invValidate.inventoryRules(),
   invValidate.checkInventoryData,
   invController.addInventory
@@ -57,13 +61,14 @@ router.get(
 /* ****************************************
  *  Edit Inventory Item
  * **************************************** */
-router.get("/edit/:inv_id", utilities.handleErrors(invController.editInventoryView));
+router.get("/edit/:inv_id",  auth.checkEmployeeOrAdmin,utilities.handleErrors(invController.editInventoryView));
 
 /* ***************************
  *  Update Inventory Data
  * ************************** */
 router.post(
   "/update/",
+  auth.checkEmployeeOrAdmin,
   inventoryRules(),
   checkUpdateData,
   utilities.handleErrors(invController.updateInventory)
@@ -72,12 +77,14 @@ router.post(
 // Route to build delete confirmation view
 router.get(
   "/delete/:inv_id",
+  auth.checkEmployeeOrAdmin,
   utilities.handleErrors(invController.deleteInventoryView)
 );
 
 // Route to carry out delete
 router.post(
   "/delete/",
+  auth.checkEmployeeOrAdmin,
   utilities.handleErrors(invController.deleteInventory)
 );
 

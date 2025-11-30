@@ -3,11 +3,11 @@
 
   <!-- Flash messages -->
   <% if (messages && messages.length > 0) { %>
-    <div class="flash-messages">
+    <ul class="messages">
       <% messages.forEach(msg => { %>
-        <ul class="flash"><%= msg %></ul>
+        <li class="message-item"><%= msg %></li>
       <% }) %>
-    </div>
+    </ul>
   <% } %>
 
 <!-- Server-side validation errors -->

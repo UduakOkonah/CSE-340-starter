@@ -29,12 +29,12 @@ body {
 }
 
 .siteName {
-  font-size: 1.6rem;
+  font-size: 1.3rem;
   font-weight: 800;
 }
 
 #tools {
-  font-size: 3vw;
+  font-size: 2.5vw;
   font-variant: small-caps;
   display: flex;
   width: 20%;
@@ -742,5 +742,17 @@ noscript {
 
   .vehicle-detail .vehicle-info h2 {
     margin-top: 0;
+  }
+
+
+  /* Site name */
+  #top-header .siteName a {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+
+  /* Tools section (account links) */
+  #tools a {
+    font-size: 1.2rem;
   }
 }

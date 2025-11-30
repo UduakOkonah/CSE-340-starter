@@ -4,7 +4,6 @@ const accountModel = require("../models/account-model");
 const { validationResult } = require("express-validator")
 const jwt = require("jsonwebtoken")
 require("dotenv").config()
-const accountController = require("../controllers/accountController")
 
 
 /* ****************************************
@@ -154,14 +153,26 @@ async function accountLogin(req, res) {
 }
 
 async function buildAccount(req, res) {
-  let nav = await utilities.getNav()
+  try {
+    const nav = await utilities.getNav();
 
-  res.render("account/account", {
-    title: "Account Management",
-    nav,
-    messages: req.flash("notice"),
-    errors: null
-  })
+    const accountData = res.locals.accountData;
+
+    res.render("account/account", {
+      title: "Account Management",
+      nav,
+      accountData,  
+      messages: req.flash("notice"),
+      errors: null
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).render("errors/error", {
+      title: 500,
+      message: "Error building account view",
+      nav
+    });
+  }
 }
 
 /* ****************************************
@@ -226,11 +237,55 @@ async function updateAccount(req, res) {
   })
 }
 
+/* *******************************
+ * Logout Process
+ * ******************************* */
+async function logout(req, res) {
+  res.clearCookie("jwt")
+  req.flash("notice", "You have been logged out.")
+  return res.redirect("/")
+}
+
+// Update Password
+async function updatePassword(req, res) {
+  try {
+    const { account_id, new_password } = req.body;
+    const nav = await utilities.getNav();
+
+    // Basic server-side validation
+    if (!new_password || new_password.length < 12) {
+      req.flash("notice", "Password must be at least 12 characters.");
+      const account = await accountModel.getAccountById(account_id);
+      return res.render("account/account-edit", { title: "Edit Account Information", nav, account, messages: req.flash("notice"), errors: null });
+    }
+
+    // Hash new password
+    const hashedPassword = await bcrypt.hash(new_password, 10);
+
+    // Update password in DB
+    const result = await accountModel.updatePassword(account_id, hashedPassword);
+
+    if (result.rowCount > 0) {
+      req.flash("notice", "Password successfully updated.");
+    } else {
+      req.flash("notice", "Password update failed.");
+    }
+
+    // Reload account info for rendering
+    const account = await accountModel.getAccountById(account_id);
+    res.render("account/edit-account", { title: "Edit Account Information", nav, account, messages: req.flash("notice"), errors: null });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error updating password.");
+  }
+}
 
 module.exports = {
   buildLogin,
   buildRegister, registerAccount,
   accountLogin, buildAccount,
-  buildEditAccount, updateAccount  
+  buildEditAccount, updateAccount,
+  logout, updatePassword
 }
 
