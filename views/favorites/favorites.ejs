@@ -1,0 +1,49 @@
+<main class="form-wrapper">
+  <h1>My Favorites</h1>
+
+  <!-- Flash Messages -->
+  <% if (messages && messages.length > 0) { %>
+    <div class="flash-messages">
+      <% messages.forEach(msg => { %>
+        <ul class="flash"><%= msg %></ul>
+      <% }) %>
+    </div>
+  <% } %>
+
+  <!-- Empty Favorites Message -->
+  <% if (!favorites || favorites.length === 0) { %>
+    <p class="empty-msg">
+      You have no favorite vehicles yet. Browse <a href="/">inventory</a> to add some!
+    </p>
+  <% } else { %>
+
+    <!-- Favorites Table -->
+    <table class="inventory-table">
+      <thead>
+        <tr>
+          <th>Make</th>
+          <th>Model</th>
+          <th>Year</th>
+          <th>Price</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% favorites.forEach(fav => { %>
+          <tr>
+            <td><%= fav.inv_make %></td>
+            <td><%= fav.inv_model %></td>
+            <td><%= fav.inv_year %></td>
+            <td>$<%= Number(fav.inv_price).toFixed(2) %></td>
+            <td>
+              <form action="/favorites/remove" method="post">
+                <input type="hidden" name="inv_id" value="<%= fav.inv_id %>">
+                <button type="submit" class="delete-btn">Remove</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+</main>

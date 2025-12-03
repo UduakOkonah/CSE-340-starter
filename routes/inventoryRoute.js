@@ -7,7 +7,6 @@ const invValidate = require("../utilities/inventory-validation")
 const { inventoryRules, checkUpdateData } = require("../utilities/inventory-validation");
 const auth = require("../utilities/account-authorization")
 
-
 // Route to build inventory by classification view
 router.get("/type/:classificationId", utilities.handleErrors(invController.buildByClassificationId));
 
@@ -87,6 +86,5 @@ router.post(
   auth.checkEmployeeOrAdmin,
   utilities.handleErrors(invController.deleteInventory)
 );
-
 
 module.exports = router

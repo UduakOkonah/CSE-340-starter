@@ -21,6 +21,7 @@ const accountRoute = require("./routes/accountRoute")
 const bodyParser = require("body-parser")
 const cookieParser = require("cookie-parser")
 const jwt = require('jsonwebtoken');
+const favoritesRoute = require("./routes/favoritesRoute");
 
 /* ***********************
  * Middleware
@@ -94,7 +95,8 @@ app.use("/", miscRouter);
 // Account routes
 app.use("/account", accountRoute)
 
-
+// Favorites routes
+app.use("/", favoritesRoute);
 
 // File Not Found Route - must be last route in list
 app.use(async (req, res, next) => {

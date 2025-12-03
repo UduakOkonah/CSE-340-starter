@@ -3,3 +3,17 @@
 <% } %>
 
 <%- detail %>
+
+<% if (loggedin) { %>
+  <% if (isFavorite) { %>
+    <form action="/favorites/remove" method="post" class="favorite-form">
+      <input type="hidden" name="inv_id" value="<%= inv_id %>">
+      <button type="submit" class="remove-fav-btn">Remove from Favorites</button>
+    </form>
+  <% } else { %>
+  <form action="/favorites/add" method="post" class="favorite-form">
+    <input type="hidden" name="inv_id" value="<%= inv_id %>">
+    <button type="submit" class="add-fav-btn">Add to Favorites</button>
+  </form>
+  <% } %>
+<% } %>

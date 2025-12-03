@@ -1,5 +1,6 @@
 const invModel = require("../models/inventory-model")
 const utilities = require("../utilities/")
+const favoritesModel = require("../models/favoritesModel");
 
 const invCont = {}
 
@@ -38,10 +39,22 @@ invCont.buildByInventoryId = async function (req, res, next) {
     const nav = await utilities.getNav();
     const title = `${vehicle.inv_make} ${vehicle.inv_model}`; // <-- fix here
 
+// check if vehicle is already a favorite for logged-in user
+    let isFavorite = false;
+    if (res.locals.accountData) {
+      const account_id = res.locals.accountData.account_id;
+      const favorites = await favoritesModel.getFavoritesByAccount(account_id);
+      isFavorite = favorites.some(fav => fav.inv_id === vehicle.inv_id);
+    }
+
     res.render("inventory/detail", {
       title,
       nav,
       detail,
+      inv_id: vehicle.inv_id,
+      messages: req.flash("notice"),
+      loggedin: !!res.locals.accountData,
+      isFavorite
     });
 
   } catch (error) {
